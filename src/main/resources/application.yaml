@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: BotIOSpring
+  datasource:
+    url: jdbc:mysql://localhost:3306/aisummarizer
+    username: admin
+    password: nimda

@@ -1,0 +1,12 @@
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: 'aisummarizer'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'nimda'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
