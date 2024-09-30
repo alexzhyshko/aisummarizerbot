@@ -1,3 +1,5 @@
+botio:
+  i18nEnabled: true
 spring:
   jpa:
     hibernate.ddl-auto: update
