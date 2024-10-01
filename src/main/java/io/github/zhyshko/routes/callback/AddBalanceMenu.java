@@ -17,7 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 @Component
 @Callback
-public class ProfileMenu implements Route {
+public class AddBalanceMenu implements Route {
 
     @ViewInitializer
     public ResponseList initView(UpdateWrapper wrapper, I18NLabelsWrapper labelsWrapper) {
@@ -26,14 +26,6 @@ public class ProfileMenu implements Route {
                 .messageId(wrapper.getMessageId())
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(new InlineKeyboardRow(
-                                        InlineKeyboardButton.builder()
-                                                .text(labelsWrapper.getLabel("profile.token.balance.button.text"))
-                                                .callbackData("token_balance")
-                                                .build(),
-                                        InlineKeyboardButton.builder()
-                                                .text(labelsWrapper.getLabel("profile.profile.details.button.text"))
-                                                .callbackData("profile_details")
-                                                .build(),
                                         InlineKeyboardButton.builder()
                                                 .text(labelsWrapper.getLabel("menu.back.button"))
                                                 .callbackData("back")
@@ -45,11 +37,10 @@ public class ProfileMenu implements Route {
                 .build();
 
         EditMessageText editMessageText = EditMessageText.builder()
-                .text(labelsWrapper.getLabel("profile.menu.text"))
+                .text(labelsWrapper.getLabel("add.balance.payment.url.text"))
                 .chatId(wrapper.getChatId())
                 .messageId(wrapper.getMessageId())
                 .build();
-
 
         return ResponseList.builder()
                 .response(editMessageText)
@@ -57,25 +48,10 @@ public class ProfileMenu implements Route {
                 .build();
     }
 
-    @CallbackMapping("token_balance")
-    public ResponseEntity handleTokenBalance() {
-
-        return ResponseEntity.builder()
-                .nextRoute(TokenBalanceMenu.class)
-                .build();
-    }
-
-    @CallbackMapping("profile_details")
-    public ResponseEntity handleProfileDetails() {
-        return ResponseEntity.builder()
-                .nextRoute(ProfileDetailsMenu.class)
-                .build();
-    }
-
     @CallbackMapping("back")
     public ResponseEntity handleBack() {
         return ResponseEntity.builder()
-                .nextRoute(MainMenu.class)
+                .nextRoute(TokenBalanceMenu.class)
                 .build();
     }
 

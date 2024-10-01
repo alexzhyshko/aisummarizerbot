@@ -23,10 +23,6 @@ public class LandingRoute implements Route {
                 .chatId(wrapper.getChatId())
                 .build();
 
-        wrapper.getSession().set("key", "val");
-
-        System.out.println(wrapper.getSession().get("key"));
-
        return ResponseEntity.builder()
                .response(deleteMessage)
                .nextRoute(AuthenticationRoute.class)

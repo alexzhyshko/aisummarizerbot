@@ -8,7 +8,7 @@ public interface UserService {
 
     Optional<User> getUser(Long userId);
 
-    User createUser(User user);
+    User saveUser(User user);
 
     boolean exists(Long userId);
 

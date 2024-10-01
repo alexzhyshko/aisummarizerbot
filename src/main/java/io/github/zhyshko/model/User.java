@@ -1,8 +1,6 @@
 package io.github.zhyshko.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +21,8 @@ public class User {
     private String lastName;
     private String languageCode;
     private UserRole userRole = UserRole.USER;
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "token_balance_id", referencedColumnName = "id")
+    private TokenBalance tokenBalance;
 
 }

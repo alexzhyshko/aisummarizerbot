@@ -8,6 +8,8 @@ import io.github.zhyshko.core.response.ResponseEntity;
 import io.github.zhyshko.core.response.ResponseList;
 import io.github.zhyshko.core.router.Route;
 import io.github.zhyshko.core.util.UpdateWrapper;
+import io.github.zhyshko.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -15,24 +17,37 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
+
 @Component
 @Callback
-public class ProfileMenu implements Route {
+public class ProfileDetailsMenu implements Route {
+
+    private UserService userService;
 
     @ViewInitializer
     public ResponseList initView(UpdateWrapper wrapper, I18NLabelsWrapper labelsWrapper) {
+
+        StringBuilder userDetailsTextBuilder = new StringBuilder();
+        this.userService.getUser(wrapper.getUserId()).ifPresentOrElse(user -> {
+            userDetailsTextBuilder.append(labelsWrapper.getLabel("user.profile.username.label", new String[]{user.getUsername()}));
+            userDetailsTextBuilder.append(System.lineSeparator());
+            userDetailsTextBuilder.append(labelsWrapper.getLabel("user.profile.firstName.label", new String[]{user.getFirstName()}));
+            userDetailsTextBuilder.append(System.lineSeparator());
+            if(user.getLastName() != null) {
+                userDetailsTextBuilder.append(labelsWrapper.getLabel("user.profile.lastName.label", new String[]{user.getLastName()}));
+                userDetailsTextBuilder.append(System.lineSeparator());
+            }
+            userDetailsTextBuilder.append(labelsWrapper.getLabel("user.profile.language.label", new String[]{user.getLanguageCode()}));
+        }, () -> userDetailsTextBuilder.append(labelsWrapper.getLabel("user.not.exists.text")));
+
         EditMessageReplyMarkup editMessageReplyMarkup = EditMessageReplyMarkup.builder()
                 .chatId(wrapper.getChatId())
                 .messageId(wrapper.getMessageId())
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(new InlineKeyboardRow(
                                         InlineKeyboardButton.builder()
-                                                .text(labelsWrapper.getLabel("profile.token.balance.button.text"))
-                                                .callbackData("token_balance")
-                                                .build(),
-                                        InlineKeyboardButton.builder()
-                                                .text(labelsWrapper.getLabel("profile.profile.details.button.text"))
-                                                .callbackData("profile_details")
+                                                .text(labelsWrapper.getLabel("profile.details.change.lang.button.text"))
+                                                .callbackData("change_lang")
                                                 .build(),
                                         InlineKeyboardButton.builder()
                                                 .text(labelsWrapper.getLabel("menu.back.button"))
@@ -45,7 +60,7 @@ public class ProfileMenu implements Route {
                 .build();
 
         EditMessageText editMessageText = EditMessageText.builder()
-                .text(labelsWrapper.getLabel("profile.menu.text"))
+                .text(userDetailsTextBuilder.toString())
                 .chatId(wrapper.getChatId())
                 .messageId(wrapper.getMessageId())
                 .build();
@@ -57,26 +72,22 @@ public class ProfileMenu implements Route {
                 .build();
     }
 
-    @CallbackMapping("token_balance")
-    public ResponseEntity handleTokenBalance() {
-
+    @CallbackMapping("change_lang")
+    public ResponseEntity handleChangeLang() {
         return ResponseEntity.builder()
-                .nextRoute(TokenBalanceMenu.class)
-                .build();
-    }
-
-    @CallbackMapping("profile_details")
-    public ResponseEntity handleProfileDetails() {
-        return ResponseEntity.builder()
-                .nextRoute(ProfileDetailsMenu.class)
+                .nextRoute(ChangeLanguageMenu.class)
                 .build();
     }
 
     @CallbackMapping("back")
     public ResponseEntity handleBack() {
         return ResponseEntity.builder()
-                .nextRoute(MainMenu.class)
+                .nextRoute(ProfileMenu.class)
                 .build();
     }
 
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 }
