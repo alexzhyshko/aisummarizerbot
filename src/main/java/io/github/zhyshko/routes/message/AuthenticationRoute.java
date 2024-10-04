@@ -69,7 +69,7 @@ public class AuthenticationRoute implements Route {
                         () -> {
                             var callback = wrapper.getUpdate().getCallbackQuery();
                             User user = callbackQueryUserConverter.convert(callback);
-                            user = userService.saveUser(user);
+                            user = userService.registerUser(user);
                             answerCallbackQuery.text(labelsWrapper.getLabel("registration.successful.button", ArrayUtils.toArray(user.getUsername())));
                             wrapper.getSession().set(CustomSessionConstants.USERNAME_KEY, user.getUsername());
                             wrapper.getSession().set(CustomSessionConstants.ROLE_KEY, user.getUserRole());

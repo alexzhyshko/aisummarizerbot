@@ -1,8 +1,6 @@
 package io.github.zhyshko.converter;
 
-import io.github.zhyshko.model.TokenBalance;
 import io.github.zhyshko.model.User;
-import io.github.zhyshko.model.UserRole;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -18,10 +16,6 @@ public class MessageUserConverter implements Converter<CallbackQuery, User> {
                 .firstName(source.getFrom().getFirstName())
                 .lastName(source.getFrom().getLastName())
                 .languageCode(source.getFrom().getLanguageCode())
-                .tokenBalance(TokenBalance.builder()
-                        .amount(1000L)
-                        .build())
-                .userRole(UserRole.USER)
                 .build();
     }
 }

@@ -9,3 +9,5 @@ spring:
     url: jdbc:mysql://localhost:3306/aisummarizer
     username: admin
     password: nimda
+backend:
+  url: http://localhost:8081/api/v1

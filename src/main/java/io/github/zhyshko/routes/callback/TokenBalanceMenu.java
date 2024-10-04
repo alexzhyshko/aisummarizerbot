@@ -29,7 +29,7 @@ public class TokenBalanceMenu implements Route {
         StringBuilder tokenBalanceTextBuilder = new StringBuilder();
 
         userService.getUser(wrapper.getUserId()).ifPresentOrElse(user -> tokenBalanceTextBuilder.append(labelsWrapper.getLabel("token.balance.text",
-                        new String[]{user.getTokenBalance().getAmount().toString()})),
+                        new String[]{user.getTokenBalance().toString()})),
                 () -> tokenBalanceTextBuilder.append(labelsWrapper.getLabel("user.not.exists.text")));
 
         EditMessageReplyMarkup editMessageReplyMarkup = EditMessageReplyMarkup.builder()

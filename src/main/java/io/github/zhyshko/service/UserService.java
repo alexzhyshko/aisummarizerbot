@@ -10,6 +10,6 @@ public interface UserService {
 
     User saveUser(User user);
 
-    boolean exists(Long userId);
+    User registerUser(User user);
 
 }
